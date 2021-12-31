@@ -1,3 +1,6 @@
+*<2021-12-31 Fri> TODO
+- TODO: Pull data from API
+- TODO: Build objects from data we pull
 * <2021-12-28 Tue> Character-creation wizard (Add update functionality?)
 Do all the computations, etc. Maybe export to a form-fillable PDF
 Make it easier to level-up.
@@ -47,8 +50,27 @@ def roll(skill):
 ***** Casting ability Str
 ***** Save DC/Attack bonus computed
 ***** List of spells: List of structs or strings
-
 *** Equipment
+*** Pulling stuff from SRD API
+Features can be pulled, which is nice.
+
+Build class and race data in our format, based on pulling from the API, and test that
+
+What we need to know is the starting profs, etc. and the features as we get them. So we can use the API to get features based on the current level
+
+So our 'fighter.json' file is basically {start: <json object>}
+
+
+*** Classes
+**** Table
+How to encode the nice little table at the beginning?
+Array, arr[n] represents what you get at n+1. 1-based arrays will be the death of me.
+Get from SRD.
+
+
+PC
+** Proof of Concept
+*** Fighter
 
 ** Generating data based on API
 - Keep track of stuff using JSON files, run to Mongo if we have to.

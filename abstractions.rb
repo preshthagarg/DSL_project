@@ -12,3 +12,14 @@ class Character
 
 
 end
+
+
+def prompt
+end
+
+entered=""
+while entered== ""
+  entered= Utils.prompt("Name (You can change it later): ")
+
+
+end

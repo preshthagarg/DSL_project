@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
-# require 'SolidAssert'
-# SolidAssert.enable_assertions
-
+require 'SolidAssert'
+SolidAssert.enable_assertions
 def hello(name)
   printf "Hello #{name}"
 end
 x = [1, 2, 3, 4, 5, 6]
-# x.each { |i| print(i * 2) }
+x.each { |i| print(i * 2) }
 
 class Inator
   attr_accessor :name, :description, :tragic_backstory
@@ -167,8 +166,8 @@ class Array
   end
 end
 
-# print [1, 2, 3].my_map { |i| i * 2 }
-# puts [1, 2, 3].each { |x| x * 2 }
+print [1, 2, 3].my_map { |i| i * 2 }
+puts [1, 2, 3].each { |x| x * 2 }
 x = Link.new(1, Link.new(2, Link.new(3)))
 
 def curry(f, n, acc = [])
@@ -176,5 +175,16 @@ def curry(f, n, acc = [])
 
   lambda do |x|
     return curry(f, n - 1, acc + [x])
+  end
+end
+require 'cli/ui'
+# CLI::UI::Prompt.ask
+CLI::UI.ask('What language/framework do you use?', options: %w[rails go ruby python])
+CLI::UI.confirm(' What language/framework do you use?', options: %w[rails go ruby python])
+
+class X
+  include CLI::UI
+  def self.thing
+    x = prompt.ask('Why?')
   end
 end

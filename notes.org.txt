@@ -1,6 +1,8 @@
 *<2021-12-31 Fri> TODO
 - TODO: Pull data from API
 - TODO: Build objects from data we pull
+- Provisional plan: One of us builds the system for making classes, the other for making races/subclasses.
+- Rohan: Classes, Esha: Races/Subclasses
 * <2021-12-28 Tue> Character-creation wizard (Add update functionality?)
 Do all the computations, etc. Maybe export to a form-fillable PDF
 Make it easier to level-up.

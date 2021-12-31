@@ -1,10 +1,115 @@
-* Ideas
+* <2021-12-28 Tue> Character-creation wizard (Add update functionality?)
+Do all the computations, etc. Maybe export to a form-fillable PDF
+Make it easier to level-up.
+
+** COMMENT Language
+# - Ruby
+- GoLang (Cool, popular in companies)
+# - Python
+# - Elixir (Functional)
+# - Any of the lisps
+** Creation
+*** Class
+*** Race
+*** Background
+*** Features at every level
+*** Subclasses?
+
+** Dynamic Blocks
+** Data Structures
+*** Char
+**** Set at init
+***** Name String
+***** Class Struct
+***** Race Struct
+***** Alignment String
+***** Background Struct
+***** Speed
+***** Traits/ideals/flaws String
+**** Updates
+***** Level Int
+***** Proficiency Computed
+***** Hit Dice Struct
+***** Hit Points Computed
+***** Stats List or Dict
+***** Skill proficiencies list of structs
+#+begin_src go
+struct skill {
+ability: abilityname
+name: str}
+
+def roll(skill):
+    return d20+character.stats[skill.ability]+ (prof if skill in char.proficiencies else 0)
+#+end_src
+***** Initiative
+***** Proficiencies List of Structs
+**** Spellcasting stuff
+***** Casting ability Str
+***** Save DC/Attack bonus computed
+***** List of spells: List of structs or strings
+
+*** Equipment
+
+** Generating data based on API
+- Keep track of stuff using JSON files, run to Mongo if we have to.
+* SRD API interface
+Can we use macros to dynamically define functions? I think we can. Or alternatively, we could just use HOFs to build a bunch of API interface functions. I think macros are nice, actually.
+Because we can have a macro that creates new functions with a unified naming convention and then call those. Actually, naming functions using macros is tricky.
+
+#+begin_src elisp
+(defmacro api-get field)
+#+end_src
+*** Modular/Local Copies
+Make it modular, so we can swap out backends moderately easily.
+Local copy lets users add homebrew rules, etc
+Base URL is a defcustom.
+*** How the API works
+- GET api/{field}/{index} gets the {field} data for the object at {index}. Index isn't really an index, more of a short ID.
+- GET api/{field}/{index}/{subfield} retrieves only subfields of a given index
+- Sometimes we can do nested subfield queries
+- GET api/{field} without an index returns a list of references to other entries in the DB.
+- Look into graphql to see if that makes the interface less boilerplatey. It seems to be promising, since it's very pattern-matchey. With this plus syntax rules, I think I'm just in love with functional pattern matching.
+*** Using it
+Basically, we need a convenient syntax to go from something like class:ranger to a way to pull it up in the SRD or the API.
+Basic syntax is <field>:<index> and optional subfields.
+
+An idea is a dynamic block SRD_ITEM or similar, with parameters for object_type and short_name/index. Then, to evaluate this dynamic block, we query from the SRD and insert it.
+*** COMMENT Consult/Helm/generic
+Completing-read takes a prompt and a collection of items. We can basically cache the /list/ of fields and the /list/ of refs for a given field. Save them to a file for persistence, and save the filename as a defcustom or something.
+https://kitchingroup.cheme.cmu.edu/blog/2015/01/24/Anatomy-of-a-helm-source/ describes a helm source. I think a macro can go from a prompt to a helm source easily enough, or a macro can construct both. Actually scratch that, helm provides a helm-comp-read function which has the same interface as completing-read.
+So we can basically define a function ~srd-search~. If called with no arguments, run completing-read over possible fields. Based on that, or based on the argument passed in, call ~srd-search-subfield~ with the appropriate subfield name passed in as a symbol or a string. We can specify that the ~interactive~ form includes a func which returns a string, and we can do some modification to have that string passed as an arg to subfield-search.
+NOTE: Cacheing list of results might be unnecessary. Test that.
+Then we can define functions that do specific searches easily.
+#+begin_src elisp
+(defun srd-search (&optional subfield query)
+  (interactive "do a completing-read over possible subfields" (completing-read "Search for a: " dnd-subfield-list))
+  (let ((url (concat srd-base-url subfield)))
+    )
+  )
+#+end_src
+Completing-read returns the choice which was selected, so save that to a variable and do fun stuff with it
+** Org-Mode Info Notes
+*** Org-info manual
+A6 Dynamic Blocks
+A10 Property API lets us do sophisticated getting and setting of properties for files, headings, TODO items, etc.
+** Reading
+- Embark
+- Completing-read
+- Pointer/markers: Basically point to a pos between two chars in a buffer.
+- Moving pointersmarkers programatically, or spinning up new ones as we need them.
+
+
+* COMMENT Ideas
 ** D&D specific
-** Worldanvil, but EMACS
-* Implementation
-* Overall Syntax
-* Specific Syntax
-* Planning
+** COMMENT Worldanvil, but EMACS
+*** Interfaces to:
+TVTropes
+Wikipedia
+*** Other features
+
+
+* COMMENT Implementation
+* COMMENT Planning
 - You create a new outline/doc/whatever
 - Templates for adventure
 ** Statblocks
@@ -18,44 +123,5 @@
 ** Sidebars
 ** Rand-gen tables
 ** Images from URL
-**
-* Bad Ideas
+* COMMENT Bad Ideas
 - Build on top of org, because it is scary extensible.
-* Org-Mode Info Notes
-** Org-info manual
-A6 Dynamic Blocks
-A10 Property API lets us do sophisticated getting and setting of properties for files, headings, TODO items, etc.
-* Spec for org-mode project
-** Links
-- Sourcebooks, 5e SRD API
--
-** Dynamic Blocks
--
-** Latex Exporting
-** SRD API interface
-Can we use macros to dynamically define functions? I think we can. Or alternatively, we could just use HOFs to build a bunch of API interface functions. I think macros are nice, actually.
-Because we can have a macro that creates new functions with a unified naming convention and then call those
-
-#+begin_src elisp
-(defmacro api-get field)
-#+end_src
-*** How the API works
-- GET api/{field}/{index} gets the {field} data for the object at {index}. Index isn't really an index, more of a short ID.
-- GET api/{field}/{index}/{subfield} retrieves only subfields of a given index
-- Sometimes we can do nested subfield queries
-- GET api/{field} without an index returns a list of references to other entries in the DB.
-- Look into graphql to see if that makes the interface less boilerplatey. It seems to be promising, since it's very pattern-matchey. With this plus syntax rules, I think I'm just in love with functional pattern matching.
-*** Using it
-Basically, we need a convenient syntax to go from something like class:ranger to a way to pull it up in the SRD or the API.
-Basic syntax is <field>:<index> and optional subfields.
-
-An idea is a dynamic block SRD_ITEM or similar, with parameters for object_type and short_name/index. Then, to evaluate this dynamic block, we query from the SRD and insert it.
-*** Consult/Helm/generic
-Completing-read takes a prompt and a collection of items. We can basically cache the /list/ of fields and the /list/ of refs for a given field. Save them to a file for persistence, and save the filename as a defcustom or something.
-https://kitchingroup.cheme.cmu.edu/blog/2015/01/24/Anatomy-of-a-helm-source/ describes a helm source. I think a macro can go from a prompt to a helm source easily enough, or a macro can construct both. Actually scratch that, helm provides a helm-comp-read function which has the same interface as completing-read.
-* Reading
-- Embark
-- Completing-read
-- Pointer/markers: Basically point to a pos between two chars in a buffer.
-- Moving pointers/markers programmatically, or spinning up new ones as we need them.
-- Figure out if floobits is a thing that works, or not

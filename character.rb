@@ -41,7 +41,9 @@ end
 
 class DnDClass
   # DONE? Separate features like ASI, etc. from messy features like sneak attack. That is more or less handled
-  def initialize(**kwargs)
+  attr_accessor :name, :desc, :caster, :subclasses, :proficiencies, :proficiency_choices, :levels
+
+  def initialize(kwargs)
     @name = kwargs[:name]
     @desc = 'TODO'
     @caster = kwargs[:caster]
@@ -51,10 +53,6 @@ class DnDClass
     @levels = kwargs[:levels] # List of lists. Each list within @levels is a list of features gained at that level. A feature is either a hash or a string.
     # Incomplete
   end
-
-  def
-  end
-
 end
 
 class DnDSubClass

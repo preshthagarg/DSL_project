@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'httparty'
 require 'json'
+require_relative 'character'
 
 $BASE_URL = 'http://localhost:3000'
 
@@ -66,7 +67,7 @@ def make_subclass_list(classname)
 end
 
 def caster?(classname)
-  resp = HTTParty.get("#{class_url classname}/#{spellcasting}").body
+  resp = HTTParty.get("#{class_url classname}/spellcasting").body
   !resp.empty?
 end
 
@@ -82,3 +83,5 @@ def make_class(classname)
 end
 
 def make_subclass(classname, subclassname); end
+
+x= make_class("warlock")

@@ -21,53 +21,55 @@ class DnDChar
 
   def roll(skill); end
 
-  def to_hash
-  end
+  def to_hash; end
 
-  def from_hash(hash)
-  end
+  def from_hash(hash); end
 
-  def to_json(file=@name+".json"); end
+  def to_json(file = @name + '.json'); end
 
   def from_json(file); end
 end
 
 class PC < DnDChar
-  def intitialize(*args)
-  end
+  def intitialize(*args); end
 
   def update(level); end
-
 end
 
 class NPC < DnDChar
 end
 
 class DnDClass
-  # TODO: Separate features like ASI, etc. from messy features like sneak attack
-  def initialize(*args)
-    @name=name
-    @desc=desc
-    @caster=caster # Spellcaster?
-    @subclasses=subclasses
-    @features=features
-    @proficiencies=proficiencies
-    @levels=[] # List of lists. Each list within @levels is a list of features gained at that level. A feature is either a hash or a string.
+  # DONE? Separate features like ASI, etc. from messy features like sneak attack. That is more or less handled
+  def initialize(**kwargs)
+    @name = kwargs[:name]
+    @desc = 'TODO'
+    @caster = kwargs[:caster]
+    @subclasses = 'TODO'
+    @proficiencies = kwargs[:proficiencies]
+    @proficiency_choices = kwargs[:proficiency_choices]
+    @levels = kwargs[:levels] # List of lists. Each list within @levels is a list of features gained at that level. A feature is either a hash or a string.
     # Incomplete
   end
+
+  def
+  end
+
 end
 
 class DnDSubClass
   # TODO: Separate features like ASI, etc. from messy features
-  def initialize(*args)
-    @superclass=superclass
+  def initialize(*_args)
+    @superclass = superclass
   end
 end
 
 class DnDRace
 end
+
 class DnDSubRace
 end
+
 module UserInterface
   # include libary_module
   include CLI
@@ -94,5 +96,6 @@ module UserInterface
   #   answer = Utils.prompt("you chose #{entered}. are you sure? (y/n)")
   #   return answer == 'y'
 end
+
 module Dice
 end
